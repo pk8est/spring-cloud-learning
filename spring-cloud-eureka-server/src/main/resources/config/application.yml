@@ -1,0 +1,18 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: spring-cloud-eureka-server
+  profiles:
+      active: @profiles.active@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+logging:
+  config: classpath:config/logback-spring.xml

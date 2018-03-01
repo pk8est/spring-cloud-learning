@@ -1,0 +1,10 @@
+server:
+  port: ${eureka.provider.server_1.port:8889}
+spring:
+  profiles:
+    active: @profiles.active@
+  application:
+    name: ${eureka.provider.server_1.name:spring-cloud-eureak-provider}
+
+logging:
+  config: classpath:config/logback-spring.xml

@@ -1,0 +1,12 @@
+eureka:
+  host: localhost
+  port: 8888
+  provider:
+    server_1:
+      port: 10001
+      name: spring-cloud-eureak-provider
+
+global:
+  management:
+    security:
+      enabled: false
