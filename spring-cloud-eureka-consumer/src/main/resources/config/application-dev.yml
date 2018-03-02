@@ -1,0 +1,4 @@
+log:
+  level: INFO
+  appender: STDOUT
+  path: D:/temp/spring-cloud-learning/${spring.application.name}
