@@ -4,7 +4,10 @@ spring:
   profiles:
     active: @profiles.active@
   application:
-    name: ${eureka.provider.server_1.name:spring-cloud-eureak-provider}
+    #name: ${eureka.provider.server_1.name:spring-cloud-eureak-provider}
+    #name: spring-cloud-eureak-provider
+  zipkin:
+    baseUrl: ${zipkin.server.host}:${zipkin.server.port:8890}
 
 logging:
   config: classpath:config/logback-spring.xml

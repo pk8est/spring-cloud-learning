@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,12 +22,15 @@ public class ApiController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping("/info")
-    public String info() {
+    public String info(HttpServletRequest request) {
         Map<String, Object> data = new HashMap();
         data.put("app", "EurekaProviderApplication");
         data.put("desc", "This is api page!");
         data.put("time", System.currentTimeMillis());
         logger.debug("{}", data);
+        logger.info("===<call trace-2, TraceId={}, SpanId={}>===",
+                request.getHeader("X-B3-TraceId"), request.getHeader("X-B3-SpanId"));
+
         return JsonOutputUtils.output(data);
     }
 

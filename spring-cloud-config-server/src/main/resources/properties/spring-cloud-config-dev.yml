@@ -1,3 +1,7 @@
+zipkin:
+  server:
+   port: 9001
+   host: http://localhost
 eureka:
   host: localhost
   port: 8888

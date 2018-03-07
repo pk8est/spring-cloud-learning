@@ -15,6 +15,7 @@
         <module>spring-cloud-eureka-provider</module>
         <module>spring-cloud-eureka-consumer</module>
         <module>spring-cloud-module-common</module>
+        <module>spring-cloud-zipkin-server</module>
     </modules>
 
     <properties>
@@ -44,6 +45,11 @@
                 <version>Camden.SR6</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>4.6</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spring-cloud-eureak-consumer
+    name: spring-cloud-zipkin-server
   cloud:
     config:
       uri: http://localhost:1111

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,16 +24,18 @@ public class ApiController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    protected ProviderFeignClient providerService;
+    protected ProviderFeignClient providerFeignClient;
 
     @RequestMapping("/info")
-    public String info() {
+    public String info(HttpServletRequest request) {
         Map<String, Object> data = new HashMap();
         data.put("app", "EurekaConsumerApplication");
         data.put("desc", "This is api page!");
         data.put("time", System.currentTimeMillis());
-        data.put("providerInfo", providerService.info());
+        data.put("providerInfo", providerFeignClient.info());
         logger.debug("{}", data);
+        logger.info("===<call trace-2, TraceId={}, SpanId={}>===",
+                request.getHeader("X-B3-TraceId"), request.getHeader("X-B3-SpanId"));
         return JsonOutputUtils.output(data);
     }
 

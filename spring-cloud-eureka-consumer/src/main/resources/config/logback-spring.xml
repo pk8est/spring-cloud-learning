@@ -4,6 +4,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <springProperty scope="context" name="SPRING_APP_NAME" source="spring.application.name"/>
     <springProperty scope="context" name="LOG_PATH" source="log.path"/>
     <springProperty scope="context" name="LOG_LEVEL" source="log.level"/>
     <springProperty scope="context" name="LOG_APPENDER" source="log.appender"/>
@@ -53,6 +54,37 @@
         </filter>
     </appender>
 
+    <!-- 为logstash输出的json格式的Appender -->
+    <appender name="logstash" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/logstash.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "service": "${SPRING_APP_NAME:-}",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "exportable": "%X{X-Span-Export:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "rest": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
     <springProfile name="!dev">
         <logger name="com.pkest" level="DEBUG"  additivity="false">
             <appender-ref ref="ROLLFILE" />
@@ -64,11 +96,13 @@
     <springProfile name="dev">
         <logger name="com.pkest" level="DEBUG"  additivity="false">
             <appender-ref ref="STDOUT" />
+            <appender-ref ref="logstash" />
         </logger>
     </springProfile>
 
     <root level="${LOG_LEVEL}">
         <appender-ref ref="${LOG_APPENDER}" />
+        <appender-ref ref="logstash" />
     </root>
 
 </configuration>
